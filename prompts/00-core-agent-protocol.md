@@ -4,7 +4,7 @@
 |---|---|
 | Layer | `00` — Core |
 | Stack | Agnostic |
-| Composes with | Any `1x`, `2x`, or `3x` stack prompt |
+| Composes with | Any stack prompt in the `01`–`19` range |
 | Extends | Nothing |
 | Excludes | All language, framework, and tooling rules |
 | Line budget | ≤ 200 lines |
@@ -30,6 +30,13 @@ agent. Every session ends with the repository in a state another agent can resum
 3. NEVER STOP SILENT — every stop ends with an updated SESSION_STATE.md.
 
 Breaking a law fails the task even when the code works.
+
+# BUDGET RULES
+- No source file exceeds 500 lines. When a file approaches the limit, split it by
+  responsibility before adding more code.
+- Work touching more than three files, or spanning more than one phase, starts with
+  `draft-<task>.md` at the repository root: goal, files, rejected options. Delete it before
+  the handoff commit. Never commit a scratchpad.
 
 # PHASE 0 — ORIENT
 No edits in this phase. Read, in order:

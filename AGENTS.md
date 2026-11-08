@@ -16,8 +16,9 @@ predictable, more verifiable, or cheaper to run?*
 ├── FOLLOWUPS.md         # Roadmap. Completed items struck, new ideas appended.
 ├── prompts/             # Finalized system prompts. One file per agent role or stack.
 │   ├── 00-core-agent-protocol.md
-│   ├── 10-react-typescript.md
-│   └── 20-wordpress.md
+│   ├── 01-vanilla-web.md
+│   ├── 02-php-modern.md
+│   └── 03-wordpress.md
 └── templates/           # Boilerplate Markdown dropped into target projects.
     ├── AGENTS.md
     ├── SESSION_STATE.md
@@ -77,16 +78,20 @@ repository commentary into another agent's context. Nothing else goes inside tha
 
 File names are `<layer>-<slug>.md`. The layer number decides what may appear inside.
 
-| Layer | Scope | May contain |
+| Range | Scope | May contain |
 |---|---|---|
 | `00` | Core protocol | Universal behavior only. Zero language or framework names. Exactly one file. |
-| `10–19` | Frontend / JS-TS | React, TypeScript, Vue, browser APIs, bundlers. |
-| `20–29` | PHP / CMS | WordPress, Laravel, Composer, WP-CLI, WPCS. |
-| `30–39` | Backend runtimes & services | Node, Python, Go, Rust, databases, queues. |
-| `40–49` | Process agents | Review, migration, test-writing, docs, release. Not stack-bound. |
+| `01–19` | Stack prompts | One per stack, numbered in adoption order: `01` vanilla web, `02` modern PHP, `03` WordPress. The next stack claims the next free number. |
+| `20–29` | Surface splits | Sub-prompts of a stack that outgrew its budget. The slug carries the parent: `20-wordpress-plugins.md` splits `03-wordpress.md`. |
+| `30–39` | Process agents | Review, migration, test-writing, docs, release. Not stack-bound. |
+| `40–49` | Reserved | Unassigned. |
 
-Reserved numbers are intentional: new prompts slot into an existing range instead of
-renumbering files. Never reuse a retired number for a different stack.
+Numbers record adoption order, not taxonomy. A new stack takes the next free number and no
+existing file is renumbered. Never reuse a retired number for a different stack.
+
+Stacks that share a language still get separate files when their idioms conflict. WordPress
+is not a PHP sub-prompt of `02`: procedural hooks, its own database layer, and WPCS cannot
+coexist with `strict_types`, PSR-4, and PDO in one instruction set.
 
 ## 6. Modularity
 

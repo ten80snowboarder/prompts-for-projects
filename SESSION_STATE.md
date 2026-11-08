@@ -6,76 +6,74 @@
 
 ## Last action
 
-Bootstrapped the empty repository to its own specification — standards, roadmap, three
-layered prompts, three installable templates, scratchpad deleted — then initialized git
-and pushed `main` to `origin`. The current HEAD is the commit containing this file; run
-`git log -1` instead of trusting a hash written here.
+Restructured the prompt set to the `00`–`03` series: wrote `01-vanilla-web.md`,
+`02-php-modern.md`, and `03-wordpress.md`, retired `10-react-typescript.md` and
+`20-wordpress.md`, extended the Core Protocol with the 500-line and scratchpad rules, and
+renumbered `AGENTS.md` §1/§5, `FOLLOWUPS.md`, and this file to match.
 
 ## Verified
 
-- `find` → 8 files in the expected layout; `draft-prompt.md` absent after deletion.
-- `grep -c '^\`\`\`'` per prompt → 2 fences each: exactly one `text` block opened and closed.
-- `wc -l` → core 145, React 114, WordPress 118; every file under the 500-line ceiling and
-  within its stated budget.
-- `grep -n '^## '` per prompt → `When to use`, `Prompt`, `Composition notes`,
-  `Revision log` present in that order.
-- Hedging-word sweep over `/prompts/` → zero hits except the deliberately quoted banned
-  phrase "should work".
-- `git ls-remote` before init → exit 0 with no refs: the remote existed and was empty, so
-  no history could be overwritten.
-- `git push origin main` → exit 0 on every push; the bootstrap commit is `0369cb2`. After
-  each push, `git ls-remote origin` matched the local `HEAD` for both `HEAD` and
-  `refs/heads/main`, and `git status --short --branch` showed `## main...origin/main`
-  with no dirty paths.
-- `git check-ignore -v` → `.DS_Store`, `.freebuff`, and `draft-prompt.md` each matched a
-  `.gitignore` line, and `git ls-files` lists 10 tracked files, all text.
-- `.gitignore` confirmed to exclude `.DS_Store`, `.freebuff/`, and `draft-prompt.md`; all
-  ten tracked files are text and none is generated.
+- `ls prompts/` → `00-core-agent-protocol.md`, `01-vanilla-web.md`, `02-php-modern.md`,
+  `03-wordpress.md`. `git rm` removed the two retired files; content survives at
+  `0369cb2:prompts/10-react-typescript.md` and `0369cb2:prompts/20-wordpress.md`.
+- `wc -l` → `00` 152 (budget 200), `01` 116, `02` 113, `03` 123 (budget 150 each). All under
+  the 500-line ceiling.
+- Fence count per prompt → 2, with exactly one `text` block opened and closed.
+- Section presence per prompt → `When to use`, `Prompt`, `Composition notes`,
+  `Revision log`, exactly once each, in order.
+- Requirement sweep — `01` contains the 500-line limit, `draft-<task>.md`, WCAG 2.2 AA,
+  `min-width` mobile-first, and Flexbox/Grid; `02` contains `declare(strict_types=1)`, PSR-4,
+  PDO prepared statements, `htmlspecialchars` with `ENT_QUOTES`, and PHP 8.3; `03` contains
+  the `wp-admin`/`wp-includes` ban, `add_action`, `sanitize_*`, `esc_html`, WPCS, and
+  `$wpdb->prepare()`.
+- Hedging sweep over the three new prompts → no hits.
+- Stale-numbering sweep over all files → one hit, the deliberate git-history pointer in
+  `FOLLOWUPS.md`.
+- `git push origin main` → exit 0; `git ls-remote origin` matches local `HEAD`;
+  `git status --short --branch` shows `## main...origin/main` with no dirty paths.
 
 ## Checks not run
 
-- No Markdown renderer or linter was executed; this repository ships no tooling and
-  `AGENTS.md` §11 forbids adding any. Structure was verified by fence and header counts
-  instead.
-- No prompt was executed against a live coding agent. Behavioral effect is unverified by
-  construction — the prompts are the artifact, not code under test.
+- No Markdown linter or renderer: this repository ships no tooling and `AGENTS.md` §11
+  forbids adding it. Verified by fence, section, and length counts instead.
+- No prompt has been executed against a live coding agent. Their behavioral effect remains
+  unverified by construction — they are the artifact, not code under test.
 
 ## Pending
 
-1. Wait for a real agent run against each prompt before claiming the rules land; record
-   observed drift as a revision, not a rewrite.
-2. Split WordPress into `21-wordpress-plugins.md` / `22-wordpress-themes.md` only when the
-   file crosses 150 lines (currently 118).
-3. Decide the standards gap in `FOLLOWUPS.md`: whether prompt metadata must declare its own
-   verification command set so composed layers cannot emit conflicting gates.
-4. `AGENTS.md` §1 tree must be updated the moment a new prompt lands, or the map lies.
+1. Split `03-wordpress.md` into `20-wordpress-plugins.md` and `21-wordpress-themes.md` when it
+   crosses 150 lines (currently 123), and link both from `03`.
+2. Write `30-code-review-agent.md` — the mechanical gate for `AGENTS.md` §9 is the largest
+   open gap.
+3. Rebuild `04-react-typescript.md` from the retired draft against the current anatomy.
+4. Field-test one prompt pair against a real task and record observed rule drift as revisions.
 
 ## Open questions
 
-- No `.agentignore` exists. `AGENTS.md` §11 states the read prohibitions in prose and
-  `.gitignore` now covers tool state and scratchpads, but nothing machine-enforces the
-  `node_modules`/`vendor`/`.git` rules. Confirm whether to add one.
-- Whether the review gate (`AGENTS.md` §9) should be automated by a `40-code-review-agent`
-  prompt that audits new prompt files, or stay a manual checklist.
-- CI is unset. A workflow that fails on a prompt file with unbalanced fences, a missing
-  required section, or a body over its declared line budget would make the §9 gate
-  mechanical rather than a promise. Not added: `AGENTS.md` §11 forbids tooling.
+- Retiring `10-react-typescript.md` rather than renumbering it to `04` keeps the set at
+  exactly three stack prompts, as specified — but leaves React without coverage until `04`
+  lands. Reverse it from `0369cb2` if that was the wrong call.
+- No `.agentignore` exists; the `node_modules`/`vendor`/`.git` read prohibitions are prose
+  only. `.gitignore` covers tool state and scratchpads, nothing else.
+- CI is unset. A workflow failing on unbalanced fences, a missing section, or an over-budget
+  body would make §9 mechanical, but `AGENTS.md` §11 forbids adding tooling.
 
 ## Active files
 
-- `.gitignore` — excludes Mac metadata, the tool marker, and the scratchpad.
-- `AGENTS.md` — repository standards, layering, review gate, session protocol.
-- `FOLLOWUPS.md` — roadmap; bootstrap and first three prompts struck as done.
-- `prompts/00-core-agent-protocol.md` — five-phase universal protocol, Three Laws.
-- `prompts/10-react-typescript.md` — React 18 + TS strict layer.
-- `prompts/20-wordpress.md` — WordPress security-first layer.
-- `templates/AGENTS.md` — installable project standards with command table.
-- `templates/SESSION_STATE.md` — handoff schema.
-- `templates/FOLLOWUPS.md` — roadmap schema.
+- `.gitignore` — Mac metadata, tool marker, scratchpad.
+- `AGENTS.md` — standards; §1 map and §5 numbering now describe the `00`–`03` series.
+- `FOLLOWUPS.md` — renumbered roadmap; moved React to `04` and recorded the retirement.
+- `prompts/00-core-agent-protocol.md` — five phases, Three Laws, budget rules.
+- `prompts/01-vanilla-web.md` — HTML semantics, WCAG 2.2 AA, mobile-first CSS, ES modules,
+  Express.
+- `prompts/02-php-modern.md` — PHP 8.3 strict types, PSR-4, PDO, output separation.
+- `prompts/03-wordpress.md` — zero core edits, hooks over overrides, WPCS, data security.
+- `templates/AGENTS.md`, `templates/SESSION_STATE.md`, `templates/FOLLOWUPS.md` — unchanged.
 
 ## Found, not fixed
 
-- `AGENTS.md` §5 reserves layers `30–39` and `40–49` with no files yet. Intentional, so new
-  prompts slot in without renumbering.
-- `AGENTS.md` §1's map and this file's Active list must both be updated when a prompt
-  lands; two sources of truth for the same fact will drift.
+- `AGENTS.md` §1's map and this file's Active list describe the same files; adding a prompt
+  requires editing both or the map drifts.
+- `02` and `03` are the same language with incompatible idioms. That is deliberate and stated
+  in both files, but nothing prevents loading both at once — the Core Protocol's composition
+  rule is the only guard.
