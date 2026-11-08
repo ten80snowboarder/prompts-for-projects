@@ -8,7 +8,8 @@
 
 Bootstrapped the empty repository to its own specification — standards, roadmap, three
 layered prompts, three installable templates, scratchpad deleted — then initialized git
-and pushed `main` to `origin` (final HEAD `d4af09b`).
+and pushed `main` to `origin`. The current HEAD is the commit containing this file; run
+`git log -1` instead of trusting a hash written here.
 
 ## Verified
 
@@ -22,10 +23,12 @@ and pushed `main` to `origin` (final HEAD `d4af09b`).
   phrase "should work".
 - `git ls-remote` before init → exit 0 with no refs: the remote existed and was empty, so
   no history could be overwritten.
-- `git push -u origin main` → exit 0; the bootstrap commit is `0369cb2`. After the
-  state-correction commit, `git ls-remote origin` showed `d4af09b` for both `HEAD` and
+- `git push origin main` → exit 0 on every push; the bootstrap commit is `0369cb2`. After
+  each push, `git ls-remote origin` matched the local `HEAD` for both `HEAD` and
   `refs/heads/main`, and `git status --short --branch` showed `## main...origin/main`
   with no dirty paths.
+- `git check-ignore -v` → `.DS_Store`, `.freebuff`, and `draft-prompt.md` each matched a
+  `.gitignore` line, and `git ls-files` lists 10 tracked files, all text.
 - `.gitignore` confirmed to exclude `.DS_Store`, `.freebuff/`, and `draft-prompt.md`; all
   ten tracked files are text and none is generated.
 
