@@ -7,8 +7,8 @@
 ## Last action
 
 Bootstrapped the empty repository to its own specification — standards, roadmap, three
-layered prompts, three installable templates, scratchpad deleted — then initialized git,
-committed it as `0369cb2`, and pushed `main` to `origin`.
+layered prompts, three installable templates, scratchpad deleted — then initialized git
+and pushed `main` to `origin` (final HEAD `d4af09b`).
 
 ## Verified
 
@@ -22,9 +22,10 @@ committed it as `0369cb2`, and pushed `main` to `origin`.
   phrase "should work".
 - `git ls-remote` before init → exit 0 with no refs: the remote existed and was empty, so
   no history could be overwritten.
-- `git push -u origin main` → exit 0. `git ls-remote origin` reports `0369cb2` for both
-  `HEAD` and `refs/heads/main`; `git status --short --branch` reports
-  `## main...origin/main` with no dirty paths.
+- `git push -u origin main` → exit 0; the bootstrap commit is `0369cb2`. After the
+  state-correction commit, `git ls-remote origin` showed `d4af09b` for both `HEAD` and
+  `refs/heads/main`, and `git status --short --branch` showed `## main...origin/main`
+  with no dirty paths.
 - `.gitignore` confirmed to exclude `.DS_Store`, `.freebuff/`, and `draft-prompt.md`; all
   ten tracked files are text and none is generated.
 
