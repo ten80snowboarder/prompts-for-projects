@@ -6,9 +6,9 @@
 
 ## Last action
 
-Bootstrapped the empty repository to its own specification: wrote the standards, roadmap,
-three layered prompts, and three installable templates, then deleted the drafting
-scratchpad.
+Bootstrapped the empty repository to its own specification — standards, roadmap, three
+layered prompts, three installable templates, scratchpad deleted — then initialized git,
+committed it as `0369cb2`, and pushed `main` to `origin`.
 
 ## Verified
 
@@ -20,6 +20,13 @@ scratchpad.
   `Revision log` present in that order.
 - Hedging-word sweep over `/prompts/` → zero hits except the deliberately quoted banned
   phrase "should work".
+- `git ls-remote` before init → exit 0 with no refs: the remote existed and was empty, so
+  no history could be overwritten.
+- `git push -u origin main` → exit 0. `git ls-remote origin` reports `0369cb2` for both
+  `HEAD` and `refs/heads/main`; `git status --short --branch` reports
+  `## main...origin/main` with no dirty paths.
+- `.gitignore` confirmed to exclude `.DS_Store`, `.freebuff/`, and `draft-prompt.md`; all
+  ten tracked files are text and none is generated.
 
 ## Checks not run
 
@@ -41,15 +48,18 @@ scratchpad.
 
 ## Open questions
 
-- Repository is not under version control. `git init` was not requested, so no history
-  exists — every change so far is unstaged-by-absence. Confirm whether to initialize.
-- No `.gitignore` or `.agentignore` exists. `AGENTS.md` §11 states the ignore rules in
-  prose; a real ignore file would enforce them. Awaiting a decision.
+- No `.agentignore` exists. `AGENTS.md` §11 states the read prohibitions in prose and
+  `.gitignore` now covers tool state and scratchpads, but nothing machine-enforces the
+  `node_modules`/`vendor`/`.git` rules. Confirm whether to add one.
 - Whether the review gate (`AGENTS.md` §9) should be automated by a `40-code-review-agent`
   prompt that audits new prompt files, or stay a manual checklist.
+- CI is unset. A workflow that fails on a prompt file with unbalanced fences, a missing
+  required section, or a body over its declared line budget would make the §9 gate
+  mechanical rather than a promise. Not added: `AGENTS.md` §11 forbids tooling.
 
 ## Active files
 
+- `.gitignore` — excludes Mac metadata, the tool marker, and the scratchpad.
 - `AGENTS.md` — repository standards, layering, review gate, session protocol.
 - `FOLLOWUPS.md` — roadmap; bootstrap and first three prompts struck as done.
 - `prompts/00-core-agent-protocol.md` — five-phase universal protocol, Three Laws.
@@ -61,7 +71,7 @@ scratchpad.
 
 ## Found, not fixed
 
-- Repository has no `.git` directory at initialisation time. Out of scope for a
-  documentation task; recorded above as an open question.
 - `AGENTS.md` §5 reserves layers `30–39` and `40–49` with no files yet. Intentional, so new
   prompts slot in without renumbering.
+- `AGENTS.md` §1's map and this file's Active list must both be updated when a prompt
+  lands; two sources of truth for the same fact will drift.
